@@ -1,0 +1,54 @@
+body {
+    background-color: whitesmoke;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.login-card {
+    background: linear-gradient(135deg, #ff3c3c, #3c83ff);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 100%;
+    max-width: 500px;
+    padding: 2.5rem;
+    color: white;
+}
+
+label{
+    color: black;
+}
+.login-card h3 {
+    font-weight: bold;
+    color: #000000;
+}
+
+.form-control {
+    border-radius: 0.5rem;
+}
+
+.btn-warning {
+    font-weight: bold;
+    border-radius: 0.5rem;
+}
+
+.election-card {
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(145deg, #ffffff, #f1f1f1);
+    transition: all 0.3s ease-in-out;
+}
+
+.election-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.alert-secondary {
+    background-color: #f8f9fa;
+    border-color: #e2e3e5;
+    color: #6c757d;
+}
