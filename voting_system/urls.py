@@ -3,7 +3,7 @@ from django.urls import path, include
 from core.views import custom_404_dev 
 
 
-admin.site.site_header = "Voting System Admin"
+admin.site.site_header = "Delegate Voting System Admin"
 admin.site.site_title = "Voting System Admin Portal"
 admin.site.index_title = "Welcome to the Voting System Admin Portal"
 
