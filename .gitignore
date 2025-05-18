@@ -25,6 +25,8 @@ var/
 .installed.cfg
 *.egg
 
+mem.py
+
 # Virtual environment
 env/
 venv/
