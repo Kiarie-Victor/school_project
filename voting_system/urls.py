@@ -3,9 +3,9 @@ from django.urls import path, include
 from core.views import custom_404_dev 
 
 
-admin.site.site_header = "Delegate Voting System Admin"
-admin.site.site_title = "Voting System Admin Portal"
-admin.site.index_title = "Welcome to the Voting System Admin Portal"
+admin.site.site_header = "Delegate Election & Voting Management System Admin"
+admin.site.site_title = "Delegate Election & Voting Management System Admin Portal"
+admin.site.index_title = "Welcome to the Delegate Election & Voting Management System Admin Portal"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
