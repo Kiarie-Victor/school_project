@@ -1,0 +1,76 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django migration files (optional, but not recommended to ignore in production)
+# ** You might want to keep these if you work in a team or deploy.
+# */migrations/*.py
+*/migrations/__pycache__/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environment
+env/
+venv/
+ENV/
+VENV/
+env.bak/
+venv.bak/
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# MyPy, Pyre, Pytype, Pylint
+.mypy_cache/
+.pyre/
+.pytype/
+.pylint.d/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Logs and local database
+*.log
+*.sqlite3
+
+# Media and static files (if generated dynamically)
+media/
+staticfiles/
+static_root/
+
+# dotenv environment files
+.env
+.env.*
+
+# System files
+.DS_Store
+Thumbs.db
