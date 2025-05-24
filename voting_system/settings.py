@@ -61,6 +61,7 @@ MIDDLEWARE = [
 
 AUTO_LOGOUT_DELAY = 900
 
+
 ROOT_URLCONF = 'voting_system.urls'
 
 TEMPLATES = [
