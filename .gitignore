@@ -24,7 +24,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-
+blockchain/contract_abi.json
 mem.py
 
 # Virtual environment
