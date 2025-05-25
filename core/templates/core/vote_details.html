@@ -1,0 +1,147 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Vote Details - {{ candidate.member.firstname }} {{ candidate.member.secondname }}{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg mb-4" style="background-color: #2563eb;">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold text-white" href="#">School Delegate Voting System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                {% if request.user.is_authenticated and request.user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white {% if request.resolver_match.url_name == 'admin_page' %}active{% endif %}" href="{% url 'admin_page' %}">ADMIN</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-white {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}" href="{% url 'student_dashboard' %}">Dashboard</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Options
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'student_profile' %}">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-success" href="{% url 'vote_results' %}">Results</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Vote Details Section -->
+<div class="container my-5">
+    <h3 class="text-center mb-4 text-primary">Vote Details for {{ candidate.member.firstname }} {{ candidate.member.secondname }}</h3>
+
+    {% if votes %}
+        <div class="d-flex gap-3 my-4">
+                <button
+            onclick="startExport(this, '{{ candidate.id }}', 'csv')"
+            class="btn btn-outline-success btn-sm me-2"
+            >
+            Export to CSV
+            <span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+            </button>
+
+            <button
+            class="btn btn-outline-danger btn-sm"
+            onclick="startExport(this, '{{ candidate.id }}', 'pdf')">
+            Export to PDF
+            <span class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+            </button>
+      </div>
+      
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped align-middle">
+                <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Tx Hash</th>
+                        <th>From</th>
+                        <th>Block</th>
+                        <th>Gas Used</th>
+                        <th>Status</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vote in votes %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td style="word-break: break-all;"><code>{{ vote.tx_hash }}</code></td>
+                            <td style="word-break: break-all;"><code>{{ vote.from_address }}</code></td>
+                            <td>{{ vote.block_number }}</td>
+                            <td>{{ vote.gas_used }}</td>
+                            <td>
+                                {% if vote.tx_status %}
+                                    <span class="badge bg-success">Confirmed</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Failed</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ vote.timestamp|date:"M d, Y H:i" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">No votes have been cast for this candidate yet.</div>
+    {% endif %}
+</div>
+
+<!-- Footer -->
+<footer class="text-white pt-4 mt-5" style="background-color: #2563eb;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="text-uppercase">Need Help?</h5>
+                <p>Email: voting@university.edu</p>
+                <p>Phone: +123 456 7890</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <h5 class="text-uppercase">Follow Us</h5>
+                <a href="#" class="text-white me-2"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="text-white me-2"><i class="bi bi-twitter-x"></i></a>
+                <a href="#" class="text-white"><i class="bi bi-linkedin"></i></a>
+            </div>
+        </div>
+        <hr class="border-light">
+        <div class="text-center pb-3">
+            <small>&copy; {{ now|date:"Y" }} University Voting System. All rights reserved.</small>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function startExport(button, candidateId, type) {
+    const spinner = button.querySelector('.spinner-border');
+    button.disabled = true;
+    spinner.classList.remove('d-none');
+
+    const url = type === 'csv'
+  ? `/export-votes/csv/${candidateId}/`
+  : `/export-votes/pdf/${candidateId}/`;
+
+
+    window.open(url, '_blank');
+
+    setTimeout(() => {
+      spinner.classList.add('d-none');
+      button.disabled = false;
+    }, 3000);
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Voting Results - {{ election.title }}{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg mb-4" style="background-color: #2563eb;">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-white" href="#">School Delegate Voting System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          {% if request.user.is_authenticated and request.user.is_superuser %}
+            <a class="nav-link text-white {% if request.resolver_match.url_name == 'admin_page' %}active{% endif %}" href="{% url 'admin_page' %}">ADMIN</a>
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}" href="{% url 'student_dashboard' %}">Dashboard</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Options
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{% url 'student_profile' %}">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-success" href="{% url 'vote_results' %}">Results</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- End Navbar -->
+
+<div class="container my-5">
+  <h2 class="text-center mb-4">{{ election.title }}</h2>
+
+  {% if results %}
+    {% with max_votes=results.0.total_votes %}
+      {% if results|length > 1 and results.1.total_votes == max_votes %}
+        <!-- Tie Detected -->
+        <div class="card mb-4 shadow-lg p-4 card-top-candidate fade-in">
+          <h3 class="card-title text-center">Leading Candidates (Tie)</h3>
+          <div class="row mt-3">
+            {% for result in results %}
+              {% if result.total_votes == max_votes %}
+                <div class="col-md-4 mb-3 text-center">
+                  <h5>{{ result.candidate.member.firstname }} {{ result.candidate.member.secondname }}</h5>
+                  <p>Votes: <strong>{{ result.total_votes }}</strong></p>
+                  <a href="{% url 'vote_details' result.candidate.id %}" class="btn btn-success btn-sm mt-2">View Vote Details</a>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <!-- One Clear Leader -->
+        <div class="card mb-4 shadow-lg p-4 card-top-candidate fade-in">
+          <h3 class="card-title">Leading Candidate</h3>
+          <h3 class="card-title text-center">{{ results.0.candidate.member.firstname }} {{ results.0.candidate.member.secondname }}</h3>
+          <p class="card-text text-center fs-5">Votes: <strong>{{ results.0.total_votes }}</strong></p>
+          <a href="{% url 'vote_details' results.0.candidate.id %}" class="btn btn-success mt-2">
+            View Vote Details
+          </a>
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Other Candidates (Exclude ties) -->
+    <div class="row mt-4">
+      {% for result in results %}
+        {% if result.total_votes != results.0.total_votes %}
+          <div class="col-md-4 mb-4 fade-in">
+            <div class="card h-100 election-card shadow-sm p-3">
+              <h5 class="card-title text-center">{{ result.candidate.member.firstname }} {{ result.candidate.member.secondname }}</h5>
+              <p class="card-text text-center">Votes: <strong>{{ result.total_votes }}</strong></p>
+              <a href="{% url 'vote_details' result.candidate.id %}" class="btn btn-primary">
+                View Vote Details
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center">
+      No results available for this election.
+    </div>
+  {% endif %}
+</div>
+
+<!-- Footer -->
+<footer class="text-white pt-4 mt-5" style="background-color: #2563eb;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h5 class="text-uppercase">Need Help?</h5>
+        <p>Email: voting@university.edu</p>
+        <p>Phone: +123 456 7890</p>
+      </div>
+      <div class="col-md-6 text-end">
+        <h5 class="text-uppercase">Follow Us</h5>
+        <a href="#" class="text-white me-2"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="text-white me-2"><i class="bi bi-twitter-x"></i></a>
+        <a href="#" class="text-white"><i class="bi bi-linkedin"></i></a>
+      </div>
+    </div>
+    <hr class="border-light">
+    <div class="text-center pb-3">
+      <small>&copy; {{ now|date:"Y" }} University Voting System. All rights reserved.</small>
+    </div>
+  </div>
+</footer>
+{% endblock %}

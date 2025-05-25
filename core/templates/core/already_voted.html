@@ -1,0 +1,121 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Already Voted{% endblock %}
+
+{% block content %}
+{% comment %}   NAVBAR  {% endcomment %}
+<nav class="navbar navbar-expand-lg mb-4" style="background-color: #2563eb;">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-white" href="#">School Delegate Voting System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          {% if request.user.is_authenticated and request.user.is_superuser %}
+            <a class="nav-link text-white {% if request.resolver_match.url_name == 'admin_page' %}active{% endif %}" href="{% url 'admin_page' %}">ADMIN</a>
+          {% endif %}
+
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}" href="{% url 'student_dashboard' %}">Dashboard</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Options
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{% url 'student_profile' %}">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-success" href="{% url 'vote_results' %}">Results</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+            
+           
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{% comment %}   END NAVBAR  {% endcomment %}
+
+<div class="container text-center">
+  <div class="p-5 rounded shadow" style="background-color: #e0f2ff;">
+    <h2 class="text-success mb-3">You've already voted in this election</h2>
+    <p class="lead">Thank you for participating!</p>
+
+    <h4 class="mt-4 mb-2">You voted for:</h4>
+    <ul class="list-group list-group-flush mb-4">
+      {% for candidate in voted_candidates %}
+  <li class="list-group-item">
+    {{ candidate.member.firstname }} {{ candidate.member.secondname }}
+    — <small>{{ candidate.election.title }}</small>
+  </li>
+{% endfor %}
+
+    </ul>
+
+    <h4 class="mt-4 mb-2">Blockchain Transaction Details:</h4>
+<ul class="list-group list-group-flush mb-4">
+  <li class="list-group-item"><strong>Transaction Hash:</strong> {{ vote.tx_hash }}</li>
+  <li class="list-group-item"><strong>Block Number:</strong> {{ vote.block_number }}</li>
+  <li class="list-group-item"><strong>From Address:</strong> {{ vote.from_address }}</li>
+  <li class="list-group-item"><strong>To Contract Address:</strong> {{ vote.to_address }}</li>
+  <li class="list-group-item"><strong>Gas Used:</strong> {{ vote.gas_used }}</li>
+  <li class="list-group-item">
+    <strong>Status:</strong>
+    {% if vote.tx_status %}
+      <span class="text-success">Successful</span>
+    {% else %}
+      <span class="text-danger">Failed</span>
+    {% endif %}
+  </li>
+</ul>
+
+    <a href="{% url 'student_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-white pt-4 mt-5" style="background-color: #2563eb;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <h5 class="text-uppercase">Contact Us</h5>
+        <p class="mb-1"><i class="bi bi-envelope-fill me-2"></i> voting@mmuniversity.edu</p>
+        <p class="mb-1"><i class="bi bi-telephone-fill me-2"></i> +254798765432</p>
+        <p><i class="bi bi-geo-alt-fill me-2"></i> Multimedia University Campus, Rongai, Magadi Rd.</p>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <h5 class="text-uppercase">Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'student_dashboard' %}" class="text-white text-decoration-none">Dashboard</a></li>
+          <li><a href="{% url 'student_profile' %}" class="text-white text-decoration-none">Profile</a></li>
+          <li><a href="{% url 'logout' %}" class="text-white text-decoration-none">Logout</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <h5 class="text-uppercase">Follow Us</h5>
+        <div class="d-flex gap-3 fs-5">
+          <a href="#" class="text-white"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-linkedin"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <hr class="border-light">
+
+    <div class="text-center pb-3">
+      <small>&copy; {{ now|date:"Y" }} MMU University Voting System. All rights reserved.</small>
+    </div>
+  </div>
+</footer>
+{% endblock %}

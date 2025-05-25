@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-white font-bold text-xl">
+                <a href="{% url 'student_dashboard' %}">School Delegate Voting System</a>
+            </div>
+            <div class="space-x-6">
+                {% if request.user.is_authenticated and request.user.is_superuser %}
+            <a class="nav-link text-white {% if request.resolver_match.url_name == 'admin_page' %}active{% endif %}" href="{% url 'admin_page' %}">ADMIN</a>
+          {% endif %}
+                <a href="{% url 'student_dashboard' %}" class="text-white hover:text-blue-300">Dashboard</a>
+                <a href="{% url 'student_profile' %}" class="text-white hover:text-blue-300">Profile</a>
+                <a href="{% url 'logout' %}" class="text-white hover:text-blue-300">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="bg-blue-600 p-6 text-white text-center">
+            <h2 class="text-2xl font-semibold mb-1">Student Profile</h2>
+            <p class="text-sm">Welcome, {{ user.firstname }} {{ user.secondname }}</p>
+        </div>
+
+        <div class="p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="text-gray-700 font-bold">Full Name</h4>
+                    <p class="text-gray-900">{{ user.firstname }} {{ user.secondname }}</p>
+                </div>
+
+                <div>
+                    <h4 class="text-gray-700 font-bold">Registration Number</h4>
+                    <p class="text-gray-900">{{ user.reg_no }}</p>
+                </div>
+
+                <div>
+                    <h4 class="text-gray-700 font-bold">Email</h4>
+                    <p class="text-gray-900">{{ user.email }}</p>
+                </div>
+
+                <div>
+                    <h4 class="text-gray-700 font-bold">Faculty</h4>
+                    <p class="text-gray-900">{{ user.faculty }}</p>
+                </div>
+
+                <div>
+                    <h4 class="text-gray-700 font-bold">Year of Study</h4>
+                    <p class="text-gray-900">{{ user.year_of_study }}</p>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <a href="{% url 'logout' %}" class="inline-block bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4 mt-10">
+        <div class="max-w-7xl mx-auto text-center">
+            <p>&copy; Student Voting System. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

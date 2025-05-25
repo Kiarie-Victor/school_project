@@ -1,0 +1,115 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Vote - {{ election.title }}{% endblock %}
+
+{% block content %}
+{% comment %}   NAVBAR  {% endcomment %}
+<nav class="navbar navbar-expand-lg mb-4" style="background-color: #2563eb;">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-white" href="#">School Delegate Voting System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          {% if request.user.is_authenticated and request.user.is_superuser %}
+            <a class="nav-link text-white {% if request.resolver_match.url_name == 'admin_page' %}active{% endif %}" href="{% url 'admin_page' %}">ADMIN</a>
+          {% endif %}
+
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}" href="{% url 'student_dashboard' %}">Dashboard</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Options
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="{% url 'student_profile' %}">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-success" href="{% url 'vote_results' %}">Results</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+            
+           
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{% comment %}   END NAVBAR  {% endcomment %}
+
+<div class="container">
+  <h2 class="mb-4">
+    Vote for candidates in the "<strong>{{ election.faculty }} {{ election.title }}</strong>" election
+  </h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="id_candidates" class="form-label">Select candidates</label>
+      <div class="form-check">
+        {{ form.candidates }}
+      </div>
+      
+      {% if form.candidates.errors %}
+        <div class="text-danger mt-2">
+          {% for error in form.candidates.errors %}
+            <div>{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Vote</button>
+  </form>
+
+  <p class="mt-2 text-muted">
+    <small>You can select up to {{ election.allowed_candidates }} candidate{{ election.allowed_candidates|pluralize }}.</small>
+  </p>
+</div>
+
+{% comment %}   FOOTER  {% endcomment %}
+<footer class="text-white pt-4 mt-5" style="background-color: #2563eb;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <h5 class="text-uppercase">Contact Us</h5>
+        <p class="mb-1"><i class="bi bi-envelope-fill me-2"></i> voting@mmuniversity.edu</p>
+        <p class="mb-1"><i class="bi bi-telephone-fill me-2"></i> +254798765432</p>
+        <p><i class="bi bi-geo-alt-fill me-2"></i> Multimedia University Campus, Rongai, Magadi Rd.</p>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <h5 class="text-uppercase">Quick Links</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'student_dashboard' %}" class="text-white text-decoration-none">Dashboard</a></li>
+          <li><a href="{% url 'student_profile' %}" class="text-white text-decoration-none">Profile</a></li>
+          <li><a href="{% url 'logout' %}" class="text-white text-decoration-none">Logout</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <h5 class="text-uppercase">Follow Us</h5>
+        <div class="d-flex gap-3 fs-5">
+          <a href="#" class="text-white"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-linkedin"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <hr class="border-light">
+
+    <div class="text-center pb-3">
+      <small>&copy; {{ now|date:"Y" }} MMU University Voting System. All rights reserved.</small>
+    </div>
+  </div>
+</footer>
+{% comment %}   END FOOTER  {% endcomment %}
+{% endblock %}
