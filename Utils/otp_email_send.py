@@ -4,7 +4,7 @@ import os
 load_dotenv()
 
 def sendEmail(reg_no, otp_code, email) -> bool:
-    receiver = email
+    receiver = "cit2270262021@mmu.ac.ke"
     subject = f'Otp Verification {otp_code}'
     sender = os.getenv('EMAIL_HOST_USER')
     message = f"Dear {reg_no}, \n Your code is: {otp_code}. \n Use it to access your account. If you didn't request this, simply ignore this message."
