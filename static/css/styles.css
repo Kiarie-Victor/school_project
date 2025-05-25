@@ -52,3 +52,60 @@ label{
     border-color: #e2e3e5;
     color: #6c757d;
 }
+
+/* Highlight the top candidate */
+.card-top-candidate {
+    background: linear-gradient(135deg, #3c83ff, #2563eb);
+    color: white;
+    border-radius: 20px;
+    transition: transform 0.3s ease;
+}
+
+.card-top-candidate:hover {
+    transform: scale(1.02);
+}
+
+/* Hover effect for candidate cards */
+.election-card {
+    transition: all 0.3s ease;
+    border-radius: 15px;
+    background: linear-gradient(145deg, #ffffff, #f1f1f1);
+}
+
+.election-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Fade-in animation */
+.fade-in {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.6s ease-in-out forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .card-top-candidate h3 {
+        font-size: 1.3rem;
+    }
+
+    .card-top-candidate p {
+        font-size: 0.9rem;
+    }
+}
+
+
+.table td code {
+    font-size: 0.85em;
+    background-color: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
