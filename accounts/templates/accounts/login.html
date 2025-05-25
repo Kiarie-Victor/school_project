@@ -1,0 +1,31 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+
+{% block title %}Student Login{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="login-card text-center shadow p-5 rounded">
+        <img src="{% static 'images/mmu-logo.png' %}" alt="MMU Logo" class="mb-4" style="width: 80px;">
+        <h3 class="mb-4 text-black">STUDENT LOGIN</h3>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.reg_no.label_tag }}
+                {{ form.reg_no }}
+                {% for error in form.reg_no.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="mb-4">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+                {% for error in form.password.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-warning w-100">Login</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

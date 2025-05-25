@@ -48,7 +48,7 @@ class Member(AbstractBaseUser, PermissionsMixin, UUIDGenerator, models.Model):  
     firstname = models.CharField(max_length=100)
     secondname = models.CharField(max_length=100)
     reg_no = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(max_length=100, unique=True)
+    email = models.EmailField(max_length=100)
     faculty = models.CharField(max_length=100)
     year_of_study = models.IntegerField()
     is_active = models.BooleanField(default=False)
